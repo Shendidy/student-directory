@@ -28,7 +28,7 @@ def print(names)
   end
 end
 def print_footer(names)
-  puts "Overall, we have #{names.count} great students".center(50)
+  puts names.count>0 ? "Overall, we have #{names.count} great students".center(50) : "We have no students yet!".center(50)
 end
 students = input_students
 print_header

@@ -29,7 +29,7 @@ def print(students)
 end
 
 def print_footer(names)
-  puts "Overall, we have #{names.count} great students"
+  puts names.count>0 ? "Overall, we have #{names.count} great students" : "We have no students yet!"
 end
 
 
