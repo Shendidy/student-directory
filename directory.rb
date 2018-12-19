@@ -10,7 +10,7 @@ def input_students
   while !entry.empty? do
     # add the student hash to the array
     students << {name: entry[0], cohort: entry[1]}
-    puts "Now we have #{students.count} students"
+    puts "Now we have #{students.count} student#{students.count == 1 ? "" : "s"}"
     # get another entry from the user
     entry = gets.chomp.split("*")
   end
@@ -24,7 +24,7 @@ def print_header
 end
 def print(names)
   names.each.with_index(1) do |name, index|
-    puts "#{index} #{name[:name]} (#{name[:cohort]} cohort)".center(50)
+    puts "#{index}. #{name[:name]} (#{name[:cohort]} cohort)".center(50)
   end
 end
 def print_footer(names)
