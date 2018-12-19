@@ -1,34 +1,34 @@
 # let's put all students into an array
 def input_students
-  puts "Please enter the names of the studentds"
+  puts "Please enter the names of the studentds and their cohort seperated by a star '*' and no spaces"
   puts "To finish, just hit return twice"
   # create an empty array
   students = []
-  # get the first name
-  name = gets.chomp
-  # while the name is not empty, repeat ths code
-  while !name.empty? do
+  # get the first entry
+  entry = gets.chomp.split("*")
+  # while the entry is not empty, repeat ths code
+  while !entry.empty? do
     # add the student hash to the array
-    students << {name: name, chohort: :November}
+    students << {name: entry[0], cohort: entry[1]}
     puts "Now we have #{students.count} students"
-    # get another name from the user
-    name = gets.chomp
+    # get another entry from the user
+    entry = gets.chomp.split("*")
   end
   # return the array of studentds
   students
 end
 
 def print_header
-  puts "The students of Villains Academy"
-  puts "-------------"
+  puts "The students of Villains Academy".center(50)
+  puts "-------------".center(50)
 end
 def print(names)
-  names.each do |name|
-    puts "#{name[:name]} (#{name[:cohort]} cohort)"
+  names.each.with_index(1) do |name, index|
+    puts "#{index} #{name[:name]} (#{name[:cohort]} cohort)".center(50)
   end
 end
 def print_footer(names)
-  puts "Overall, we have #{names.count} great students"
+  puts "Overall, we have #{names.count} great students".center(50)
 end
 students = input_students
 print_header
