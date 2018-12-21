@@ -24,7 +24,7 @@ def print_header
 end
 def print(names)
   names.each.with_index(1) do |name, index|
-    puts "#{index}. #{name[:name]} (#{name[:cohort]} cohort)".center(50) if name[:name].chr == "S"
+    puts "#{index}. #{name[:name]} (#{name[:cohort]} cohort)".center(50) if name[:name].length < 12
   end
 end
 def print_footer(names)
