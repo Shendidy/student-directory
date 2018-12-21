@@ -17,14 +17,15 @@ def input_students
   # return the array of studentds
   students
 end
-
 def print_header
   puts "The students of Villains Academy".center(50)
   puts "-------------".center(50)
 end
 def print(names)
-  names.each.with_index(1) do |name, index|
-    puts "#{index}. #{name[:name]} (#{name[:cohort]} cohort)".center(50) if name[:name].length < 12
+  i = 0
+  while i < names.count do
+    puts "#{(i+1).to_s}. #{names[i][:name]} (#{names[i][:cohort]} cohort)".center(50)
+    i += 1
   end
 end
 def print_footer(names)
