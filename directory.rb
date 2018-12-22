@@ -8,6 +8,40 @@ def input_students
   entry = gets.chomp.split("*")
   # while the entry is not empty, repeat ths code
   while !entry.empty? do
+    # get cohort and turn into a symbol (if empty then make assumption it's January)
+    entry[4].downcase!
+    case entry[4]
+    when "january"
+      entry[4] = "January"
+    when "february"
+      entry[4] = "February"
+    when "march"
+      entry[4] = "March"
+    when "april"
+      entry[4] = "April"
+    when "may"
+      entry[4] = "May"
+    when "june"
+      entry[4] = "June"
+    when "july"
+      entry[4] = "July"
+    when "august"
+      entry[4] = "August"
+    when "september"
+      entry[4] = "September"
+    when "october"
+      entry[4] = "October"
+    when "november"
+      entry[4] = "November"
+    when "december"
+      entry[4] = "December"
+    else
+      puts "Wrong cohort entered, we set it to the default of January"
+      entry[4] = "January"
+    end
+
+
+
     # add the student hash to the array
     students << {name: entry[0], hobby: entry[1], country: entry[2], height: entry[3], cohort: entry[4]}
     puts "Now we have #{students.count} student#{students.count == 1 ? "" : "s"}"
