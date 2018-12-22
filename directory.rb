@@ -8,7 +8,6 @@ def input_students
   entry = gets.chomp.split("*")
   # while the entry is not empty, repeat ths code
   while !entry.empty? do
-    puts entry.count
     # ensure that there are 5 infoes for each entry
     if entry.count < 5
       i = entry.count - 1
@@ -57,9 +56,6 @@ def input_students
       puts "Wrong cohort entered, we set it to the default of January"
       entry[4] = :January
     end
-
-
-
     # add the student hash to the array
     students << {name: entry[0], hobby: entry[1], country: entry[2], height: entry[3], cohort: entry[4]}
     puts "Now we have #{students.count} student#{students.count == 1 ? "" : "s"}"
@@ -70,18 +66,18 @@ def input_students
   students
 end
 def print_header
-  puts "The students of Villains Academy".center(50)
-  puts "-------------".center(50)
+  puts
+  puts "The students of Villains Academy".center(120)
+  puts "-------------".center(120)
 end
-def print(names)
-  i = 0
-  while i < names.count do
-    puts "#{(i+1).to_s}. #{names[i][:name]} (hobby: #{names[i][:hobby]}, country of birth: #{names[i][:country]}, height: #{names[i][:height]}, #{names[i][:cohort]} cohort)".center(120)
-    i += 1
+def print(students)
+  students.each_with_index do |student, index|
+    puts "#{(index+1).to_s}. #{student[:name]} (hobby: #{student[:hobby]}, country of birth: #{student[:country]}, height: #{student[:height]}, #{student[:cohort]} cohort)".center(120)
   end
 end
 def print_footer(names)
-  puts names.count>0 ? "Overall, we have #{names.count} great students".center(50) : "We have no students yet!".center(50)
+  puts names.count>0 ? "Overall, we have #{names.count} great students".center(120) : "We have no students yet!".center(120)
+  puts
 end
 students = input_students
 print_header
