@@ -57,7 +57,7 @@ def input_students
       entry[4] = :January
     end
     # add the student hash to the array
-    students << {name: entry[0], hobby: entry[1], country: entry[2], height: entry[3], cohort: entry[4]}
+    students << {name: entry[0], hobby: entry[1] == "" ? "None" : entry[1], country: entry[2] == "" ? "None" : entry[2], height: entry[3] == "" ? "None" : entry[3], cohort: entry[4]}
     puts "Now we have #{students.count} student#{students.count == 1 ? "" : "s"}"
     # get another entry from the user
     entry = gets.chomp.split("*")
@@ -71,8 +71,23 @@ def print_header
   puts "-------------".center(120)
 end
 def print(students)
-  students.each_with_index do |student, index|
-    puts "#{(index+1).to_s}. #{student[:name]} (hobby: #{student[:hobby]}, country of birth: #{student[:country]}, height: #{student[:height]}, #{student[:cohort]} cohort)".center(120)
+  cohorts = []
+  students.each do |student|
+    if !cohorts.include?(student[:cohort])
+      cohorts << student[:cohort]
+    end
+  end
+
+  i = 1
+  cohorts.each do |month|
+    puts "In #{month}'s cohort we have:"
+    students.each do |student|
+      if student[:cohort] == month
+        puts "#{(i).to_s}. #{student[:name]} (hobby: #{student[:hobby]}, country of birt: #{student[:country]}, height: #{student[:height]}, #{student[:cohort]} cohort)".center(120)
+        i += 1
+      end
+      puts
+    end
   end
 end
 def print_footer(names)
