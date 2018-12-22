@@ -5,7 +5,7 @@ def input_students
   # create an empty array
   students = []
   # get the first entry
-  entry = gets.chomp.split("*")
+  entry = gets.strip.split("*")
   # while the entry is not empty, repeat ths code
   while !entry.empty? do
     # ensure that there are 5 infoes for each entry
@@ -60,7 +60,7 @@ def input_students
     students << {name: entry[0], hobby: entry[1] == "" ? "None" : entry[1], country: entry[2] == "" ? "None" : entry[2], height: entry[3] == "" ? "None" : entry[3], cohort: entry[4]}
     puts "Now we have #{students.count} student#{students.count == 1 ? "" : "s"}"
     # get another entry from the user
-    entry = gets.chomp.split("*")
+    entry = gets.strip.split("*")
   end
   # return the array of studentds
   students
@@ -86,7 +86,6 @@ def print(students)
         puts "#{(i).to_s}. #{student[:name]} (hobby: #{student[:hobby]}, country of birt: #{student[:country]}, height: #{student[:height]}, #{student[:cohort]} cohort)".center(120)
         i += 1
       end
-      puts
     end
   end
 end
