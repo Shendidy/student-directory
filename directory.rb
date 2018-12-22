@@ -8,36 +8,54 @@ def input_students
   entry = gets.chomp.split("*")
   # while the entry is not empty, repeat ths code
   while !entry.empty? do
+    puts entry.count
+    # ensure that there are 5 infoes for each entry
+    if entry.count < 5
+      i = entry.count - 1
+      while i < 5
+        case i
+        when 1
+          entry[i] = :None
+        when 2
+          entry[i] = :None
+        when 3
+          entry[i] = :None
+        when 4
+          entry[i] = "january"
+        end
+        i += 1
+      end
+    end
     # get cohort and turn into a symbol (if empty then make assumption it's January)
     entry[4].downcase!
     case entry[4]
     when "january"
-      entry[4] = "January"
+      entry[4] = :January
     when "february"
-      entry[4] = "February"
+      entry[4] = :February
     when "march"
-      entry[4] = "March"
+      entry[4] = :March
     when "april"
-      entry[4] = "April"
+      entry[4] = :April
     when "may"
-      entry[4] = "May"
+      entry[4] = :May
     when "june"
-      entry[4] = "June"
+      entry[4] = :June
     when "july"
-      entry[4] = "July"
+      entry[4] = :July
     when "august"
-      entry[4] = "August"
+      entry[4] = :August
     when "september"
-      entry[4] = "September"
+      entry[4] = :September
     when "october"
-      entry[4] = "October"
+      entry[4] = :October
     when "november"
-      entry[4] = "November"
+      entry[4] = :November
     when "december"
-      entry[4] = "December"
+      entry[4] = :December
     else
       puts "Wrong cohort entered, we set it to the default of January"
-      entry[4] = "January"
+      entry[4] = :January
     end
 
 
