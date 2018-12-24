@@ -7,7 +7,7 @@ def input_students
             # create an empty array
             # students = []
   # get the first entry
-  entry = gets.chomp.split("*")
+  entry = STDIN.gets.chomp.split("*")
   # while the entry is not empty, repeat ths code
   while !entry.empty? do
     # ensure that there are 5 infoes for each entry
@@ -62,7 +62,7 @@ def input_students
     @students << {name: entry[0], hobby: entry[1] == "" ? "None" : entry[1], country: entry[2] == "" ? "None" : entry[2], height: entry[3] == "" ? "None" : entry[3], cohort: entry[4]}
     puts "Now we have #{@students.count} student#{@students.count == 1 ? "" : "s"}"
     # get another entry from the user
-    entry = gets.chomp.split("*")
+    entry = STDIN.gets.chomp.split("*")
   end
 end
 def save_students
@@ -76,14 +76,35 @@ def save_students
   end
   file.close
 end
-def load_students
-  file = File.open("students.csv", "r")
+def load_students(filename = "students.csv")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
     name, hobby, country, height, cohort = line.chomp.split(',')
     @students << {name: name, hobby: hobby, country: country, height: height, cohort: cohort.to_sym}
   end
   file.close
 end
+
+
+
+
+def try_load_students
+  filename = ARGV.first # first argument from the command csv_line
+  return if filename.nil? # get out of the method if it isn't given
+  if File.exists?(filename) # if it exists
+    load_students(filename)
+    puts "Loaded #{@students.count} students from #{filename}"
+  else # if it doens't exists
+    puts "Sorry, #{filename} doesn't exist."
+    exit # quit the program
+  end
+end
+
+
+
+
+
+
 def print_header
   puts
   puts "The students of Villains Academy".center(120)
@@ -142,8 +163,9 @@ end
 def interactive_menu
   loop do
     print_menu
-    process(gets.chomp)
+    process(STDIN.gets.chomp)
   end
 end
 
+try_load_students
 interactive_menu
