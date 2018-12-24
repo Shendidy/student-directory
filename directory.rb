@@ -65,13 +65,9 @@ def input_students
     entry = gets.chomp.split("*")
   end
 end
-
-
-
-
 def save_students
   # open the file for writing
-  file = File.open("students.csv", "w")
+  file = File.open("students.csv", "a+")
   # iterate over the array of studentds
   @students.each do |student|
     student_data = [student[:name], student[:hobby], student[:country], student[:height], student[:cohort]]
@@ -80,10 +76,14 @@ def save_students
   end
   file.close
 end
-
-
-
-
+def load_students
+  file = File.open("students.csv", "r")
+  file.readlines.each do |line|
+    name, hobby, country, height, cohort = line.chomp.split(',')
+    @students << {name: name, hobby: hobby, country: country, height: height, cohort: cohort.to_sym}
+  end
+  file.close
+end
 def print_header
   puts
   puts "The students of Villains Academy".center(120)
@@ -101,7 +101,7 @@ def print_students_list
     puts "In #{month}'s cohort we have:"
     @students.each do |student|
       if student[:cohort] == month
-        puts "#{(i).to_s}. #{student[:name]} (hobby: #{student[:hobby]}, country of birt: #{student[:country]}, height: #{student[:height]}, #{student[:cohort]} cohort)".center(120)
+        puts "#{(i).to_s}. #{student[:name]} (hobby: #{student[:hobby]}, country of birth: #{student[:country]}, height: #{student[:height]}, #{student[:cohort]} cohort)".center(120)
         i += 1
       end
     end
@@ -115,6 +115,7 @@ def print_menu
   puts "1. Input the students list"
   puts "2. Show the students list"
   puts "3. Save the list to students.csv"
+  puts "4. Load the list from students.csv"
   puts "9. Exit" # 9 because we'll be adding more items/options/choices
 end
 def process(selection)
@@ -125,6 +126,8 @@ def process(selection)
     show_students
   when "3"
     save_students
+  when "4"
+    load_students
   when "9"
     exit # this will cause the program to terminate
   else
