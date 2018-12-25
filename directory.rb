@@ -54,9 +54,9 @@ def set_cohort(cohort)
   return :January
 end
 
-def save_students
+def save_students(file_to_save)
   # open the file for writing
-  file = File.open("students.csv", "a+")
+  file = File.open(file_to_save, "a+")
   # iterate over the array of studentds
   @students.each do |student|
     student_data = [student[:name], student[:hobby], student[:country], student[:height], student[:cohort]]
@@ -66,17 +66,35 @@ def save_students
   file.close
 end
 
-def load_students(filename = "students.csv")
-  file = File.open(filename, "r")
-  file.readlines.each do |line|
-    name, hobby, country, height, cohort = line.chomp.split(',')
-    read_students([name, hobby, country, height, cohort.to_sym])
+def load_students(filename)
+  if File.exists?(filename)
+    file = File.open(filename, "r")
+    file.readlines.each do |line|
+      name, hobby, country, height, cohort = line.chomp.split(',')
+      read_students([name, hobby, country, height, cohort.to_sym])
+    end
+    puts "Loaded #{@students.count} students from #{filename}"
+    file.close
+  else
+    puts "File doesn't exist!"
   end
-  puts "Loaded #{@students.count} students from #{filename}"
-  file.close
 end
 
+def try_load_students # checks on startup if a file was passed for loading
+  filename = ARGV.first # first argument from the command csv_line
+  return if filename.nil? # get out of the method if it isn't given
+  if File.exists?(filename) # if it exists
+    load_students(filename)
+  else # if it doens't exists
+    puts "Sorry, #{filename} doesn't exist."
+    exit # quit the program
+  end
+end
 
+def clear_list
+  @students = []
+  puts "List cleared."
+end
 
 def read_students(entry)
   # set defaults if fields left empty
@@ -88,15 +106,11 @@ def read_students(entry)
   @students << {name: entry[0], hobby: entry[1], country: entry[2], height: entry[3], cohort: entry[4]}
 end
 
-def try_load_students # checks on startup if a file was passed for loading
-  filename = ARGV.first # first argument from the command csv_line
-  filename = "students.csv" if filename.nil? # get out of the method if it isn't given
-  if File.exists?(filename) # if it exists
-    load_students(filename)
-  else # if it doens't exists
-    puts "Sorry, #{filename} doesn't exist."
-    exit # quit the program
-  end
+def ask_for_file_name(action)
+  puts "Which file to #{action}:"
+  file = STDIN.gets.chomp
+
+  file == "" ? ask_for_file_name(action) : file
 end
 
 def print_header
@@ -104,6 +118,7 @@ def print_header
   puts "The students of Villains Academy".center(120)
   puts "-------------".center(120)
 end
+
 def print_students_list
   cohorts = []
   @students.each do |student|
@@ -127,10 +142,11 @@ def print_footer
   puts
 end
 def print_menu
-  puts "1. Input the students list"
-  puts "2. Show the students list"
-  puts "3. Save the list to students.csv"
-  puts "4. Load the list from students.csv"
+  puts "1. Input students manually"
+  puts "2. Show the list of currently available students"
+  puts "3. Save the list currently available students"
+  puts "4. Load a list and add to currently available students"
+  puts "5. Empty current list"
   puts "9. Exit" # 9 because we'll be adding more items/options/choices
 end
 def process(selection)
@@ -142,11 +158,14 @@ def process(selection)
     show_students
     puts "Action completed, please choose new action"
   when "3"
-    save_students
+    save_students(ask_for_file_name("save"))
     puts "Action completed, please choose new action"
   when "4"
-    load_students
+    load_students(ask_for_file_name("load"))
     puts "Action completed, please choose new action"
+  when "5"
+    puts "Are you sure you want to clear the current list of students? (Y/N)"
+    STDIN.gets.chomp == "Y" ? clear_list : return
   when "9"
     puts "Bye"
     exit # this will cause the program to terminate
