@@ -56,25 +56,25 @@ end
 
 def save_students(file_to_save)
   # open the file for writing
-  file = File.open(file_to_save, "a+")
-  # iterate over the array of studentds
-  @students.each do |student|
-    student_data = [student[:name], student[:hobby], student[:country], student[:height], student[:cohort]]
-    csv_line = student_data.join(",")
-    file.puts csv_line
-  end
-  file.close
+  File.open(file_to_save, "a+"){|file|
+    # iterate over the array of studentds
+    @students.each do |student|
+      student_data = [student[:name], student[:hobby], student[:country], student[:height], student[:cohort]]
+      csv_line = student_data.join(",")
+      file.puts csv_line
+    end
+  }
 end
 
 def load_students(filename)
   if File.exists?(filename)
-    file = File.open(filename, "r")
-    file.readlines.each do |line|
-      name, hobby, country, height, cohort = line.chomp.split(',')
-      read_students([name, hobby, country, height, cohort.to_sym])
-    end
-    puts "Loaded #{@students.count} students from #{filename}"
-    file.close
+    File.open(filename, "r") {|file|
+      file.readlines.each do |line|
+        name, hobby, country, height, cohort = line.chomp.split(',')
+        read_students([name, hobby, country, height, cohort.to_sym])
+      end
+      puts "Loaded #{@students.count} students from #{filename}"
+    }
   else
     puts "File doesn't exist!"
   end
