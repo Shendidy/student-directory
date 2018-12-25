@@ -4,67 +4,57 @@
 def input_students
   puts "Please enter the names, hobby, country of birth, height, and cohort of the studentds seperated by a star '*' and no spaces"
   puts "To finish, just hit return twice"
-            # create an empty array
-            # students = []
   # get the first entry
   entry = STDIN.gets.chomp.split("*")
+
   # while the entry is not empty, repeat ths code
   while !entry.empty? do
-    # ensure that there are 5 infoes for each entry
-    if entry.count < 5
-      i = entry.count - 1
-      while i < 5
-        case i
-        when 1
-          entry[i] = :None
-        when 2
-          entry[i] = :None
-        when 3
-          entry[i] = :None
-        when 4
-          entry[i] = "january"
-        end
-        i += 1
-      end
-    end
-    # get cohort and turn into a symbol (if empty then make assumption it's January)
-    entry[4].downcase!
-    case entry[4]
-    when "january"
-      entry[4] = :January
-    when "february"
-      entry[4] = :February
-    when "march"
-      entry[4] = :March
-    when "april"
-      entry[4] = :April
-    when "may"
-      entry[4] = :May
-    when "june"
-      entry[4] = :June
-    when "july"
-      entry[4] = :July
-    when "august"
-      entry[4] = :August
-    when "september"
-      entry[4] = :September
-    when "october"
-      entry[4] = :October
-    when "november"
-      entry[4] = :November
-    when "december"
-      entry[4] = :December
-    else
-      puts "Wrong cohort entered, we set it to the default of January"
-      entry[4] = :January
-    end
+    # set default entries
+    entry = set_entries(entry)
+
+    # set default cohorts
+    entry[4] = set_cohort(entry[4].downcase)
+
     # add the student hash to the array
-    @students << {name: entry[0], hobby: entry[1] == "" ? "None" : entry[1], country: entry[2] == "" ? "None" : entry[2], height: entry[3] == "" ? "None" : entry[3], cohort: entry[4]}
+    read_students(entry)
+
     puts "Now we have #{@students.count} student#{@students.count == 1 ? "" : "s"}"
+
     # get another entry from the user
     entry = STDIN.gets.chomp.split("*")
   end
 end
+
+def set_entries(entry)
+  # ensure that there are 5 entries for each student
+  if entry.count < 5
+    i = entry.count - 1
+    while i < 5
+      case i
+      when 1
+        entry[i] = :None
+      when 2
+        entry[i] = :None
+      when 3
+        entry[i] = :None
+      when 4
+        entry[i] = "january"
+      end
+      i += 1
+    end
+  end
+  return entry
+end
+
+def set_cohort(cohort)
+  cohorts = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+
+  return cohort.capitalize.to_sym if cohorts.include?(cohort.capitalize)
+  puts "Wrong cohort entered, we set it to the default of January"
+  return :January
+end
+
+
 def save_students
   # open the file for writing
   file = File.open("students.csv", "a+")
@@ -80,15 +70,24 @@ def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, hobby, country, height, cohort = line.chomp.split(',')
-    @students << {name: name, hobby: hobby, country: country, height: height, cohort: cohort.to_sym}
+    read_students([name, hobby, country, height, cohort.to_sym])
   end
   file.close
 end
 
 
 
+def read_students(entry)
+  # set defaults if fields left empty
+  entry[1] = "None" if entry[1] == ""
+  entry[2] = "None" if entry[2] == ""
+  entry[3] = "None" if entry[3] == ""
 
-def try_load_students
+  # write a method to be used in all other methods when they want to add students to @students array
+  @students << {name: entry[0], hobby: entry[1], country: entry[2], height: entry[3], cohort: entry[4]}
+end
+
+def try_load_students # checks on startup if a file was passed for loading
   filename = ARGV.first # first argument from the command csv_line
   return if filename.nil? # get out of the method if it isn't given
   if File.exists?(filename) # if it exists
@@ -99,11 +98,6 @@ def try_load_students
     exit # quit the program
   end
 end
-
-
-
-
-
 
 def print_header
   puts
