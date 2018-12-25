@@ -38,7 +38,7 @@ def set_entries(entry)
       when 3
         entry[i] = :None
       when 4
-        entry[i] = "january"
+        entry[i] = :January
       end
       i += 1
     end
@@ -54,7 +54,6 @@ def set_cohort(cohort)
   return :January
 end
 
-
 def save_students
   # open the file for writing
   file = File.open("students.csv", "a+")
@@ -66,12 +65,14 @@ def save_students
   end
   file.close
 end
+
 def load_students(filename = "students.csv")
   file = File.open(filename, "r")
   file.readlines.each do |line|
     name, hobby, country, height, cohort = line.chomp.split(',')
     read_students([name, hobby, country, height, cohort.to_sym])
   end
+  puts "Loaded #{@students.count} students from #{filename}"
   file.close
 end
 
@@ -92,7 +93,6 @@ def try_load_students # checks on startup if a file was passed for loading
   filename = "students.csv" if filename.nil? # get out of the method if it isn't given
   if File.exists?(filename) # if it exists
     load_students(filename)
-    puts "Loaded #{@students.count} students from #{filename}"
   else # if it doens't exists
     puts "Sorry, #{filename} doesn't exist."
     exit # quit the program
@@ -137,13 +137,18 @@ def process(selection)
   case selection
   when "1"
     input_students
+    puts "Action completed, please choose new action"
   when "2"
     show_students
+    puts "Action completed, please choose new action"
   when "3"
     save_students
+    puts "Action completed, please choose new action"
   when "4"
     load_students
+    puts "Action completed, please choose new action"
   when "9"
+    puts "Bye"
     exit # this will cause the program to terminate
   else
     puts "I don't know what you meant, please try again"
